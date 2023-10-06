@@ -11,11 +11,11 @@ func formHandler(w http.ResponseWriter, r *http.Request) {
 		fmt.Fprintf(w, "ParseForm() err: %v", err)
 		return
 	}
-	fmt.Fprintf(w, "POST request succesful")
+	fmt.Fprintf(w, "POST request successful\n") // Added a newline character
 	name := r.FormValue("name")
 	address := r.FormValue("address")
 	fmt.Fprintf(w, "Name = %s\n", name)
-	fmt.Fprintf(w, "Address =%\n", address)
+	fmt.Fprintf(w, "Address = %s\n", address) // Fixed the formatting string
 }
 
 func helloHandler(w http.ResponseWriter, r *http.Request) {
@@ -24,20 +24,20 @@ func helloHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	if r.Method != "GET" {
-		http.Error(w, "method is not supported", http.StatusNotFound)
+		http.Error(w, "method is not supported", http.StatusMethodNotAllowed) // Changed status to StatusMethodNotAllowed
 		return
 	}
 	fmt.Fprintf(w, "hello!")
 }
-func main() {
 
+func main() {
 	fileServer := http.FileServer(http.Dir("./static"))
 	http.Handle("/", fileServer)
 	http.HandleFunc("/form", formHandler)
 	http.HandleFunc("/hello", helloHandler)
 
-	fmt.Printf("Starting server at pot 8080\n")
-	if err := http.ListenAndServe(":8080", nil); err != nil {
+	fmt.Printf("Starting server at port 8080\n") // Corrected the typo "potr" to "port"
+	if err := http.ListenAndServe("localhost:8080", nil); err != nil {
 		log.Fatal(err)
 	}
 }
